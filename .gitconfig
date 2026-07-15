@@ -1,0 +1,42 @@
+[include]
+    path = ~/dot/delta-themes.gitconfig
+
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    dark = true      # or light = true, or omit for auto-detection
+    line-numbers = true
+    # zero-style = dim syntax
+    side-by-side = true
+    # features = arctic-fox
+
+[alias]
+	st = status
+	cm = commit
+
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --decorate --all
+  lf = log --oneline --decorate --graph --abbrev-commit --compact-summary
+
+[user]
+	name = Michael Conrads
+	email = michaelconrads@me.com
+[commit]
+	verbose = false
+[diff]
+	algorithm = histogram
+
+
+[merge]
+    conflictstyle = zdiff3
+
+[pull]
+	rebase = true
+[rebase]
+	autostash = true
+[push]
+	autoSetupRemote = true
