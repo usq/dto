@@ -17,7 +17,7 @@
 
 [alias]
 	st = status
-	cm = commit
+	cm = commit -v
 
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --decorate --all
   lf = log --oneline --decorate --graph --abbrev-commit --compact-summary
