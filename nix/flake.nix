@@ -3,20 +3,27 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager }:
   let
     configuration = { pkgs, ... }: {
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
-      environment.systemPackages =
+      environment.systemPackages = with pkgs;
         [
-        pkgs.neovim
-        pkgs.tmux
-        pkgs.ghostty-bin
+        neovim
+        tmux
+        ghostty-bin
+        eza
+        emacs31
+        process-compose
         ];
 
       # Necessary for using flakes on this system.
@@ -31,13 +38,35 @@
 
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
+
+      users.users.michaelconrads = {
+        name = "michaelconrads";
+        home = "/Users/michaelconrads";
+      };
+
+      home-manager.useGlobalPkgs = true;
+      home-manager.backupFileExtension = "hm-bak";
+
+      home-manager.users.michaelconrads = { config, ... }: {
+         home.stateVersion = "26.11";
+
+        home.file.".tmux.conf".source =
+          config.lib.file.mkOutOfStoreSymlink
+            "/Users/michaelconrads/dto/.tmux.conf";
+      };
+
+
+
     };
   in
   {
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#Rhea
     darwinConfigurations."Rhea" = nix-darwin.lib.darwinSystem {
-      modules = [ configuration ];
+      modules = [
+      configuration
+      home-manager.darwinModules.home-manager
+      ];
     };
   };
 }
