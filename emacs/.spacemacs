@@ -960,6 +960,10 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
+
+  (add-to-list 'treesit-language-source-alist
+               '(nix "https://github.com/nix-community/tree-sitter-nix"))
+
   (add-to-list 'exec-path "~/.cargo/bin/")
 
   (use-package pdf-tools)
